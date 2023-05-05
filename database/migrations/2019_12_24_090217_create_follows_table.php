@@ -14,11 +14,21 @@ class CreateFollowsTable extends Migration
     public function up()
     {
         Schema::create('follows', function (Blueprint $table) {
-            $table->integer('id')->autoIncrement();
-            $table->integer('following_id');
-            $table->integer('followed_id');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->default(DB::raw('current_timestamp on update current_timestamp'));
+
+            $table->unsignedInteger('followed_id');
+            $table->unsignedInteger('following_id');
+
+            //$table->bigIncrements('id');
+            //$table->integer('following_id')->index();
+            //$table->integer('followed_id')->index();
+
+            $table->foreign('following_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('followed_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unique([
+                'following_id',
+                'followed_id'
+            ]);
         });
     }
 

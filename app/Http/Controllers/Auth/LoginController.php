@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -35,11 +36,14 @@ class LoginController extends Controller
      * @return void
      */
     public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+   {
+       $this->middleware('guest')->except('logout');
+   }
 
     public function login(Request $request){
+
+        $this->middleware('guest');
+
         if($request->isMethod('post')){
 
             $data=$request->only('mail','password');
@@ -51,4 +55,11 @@ class LoginController extends Controller
         }
         return view("auth.login");
     }
+
+    public function logout()
+    {
+        return redirect('/login');
+
+    }
+
 }
