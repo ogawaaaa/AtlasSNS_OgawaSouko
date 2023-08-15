@@ -67,7 +67,7 @@ class PostsController extends Controller
     public function show(){
         // Postモデル経由でpostsテーブルのレコードを取得
         $posts = Post::get();
-        return view('followList', compact('posts'));
+        return view('follows.followList', compact('posts'));
       }
 
 }

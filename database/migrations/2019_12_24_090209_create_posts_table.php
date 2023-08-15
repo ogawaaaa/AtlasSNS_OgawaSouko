@@ -19,6 +19,14 @@ class CreatePostsTable extends Migration
             $table->string('post',400)->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('current_timestamp on update current_timestamp'));
+
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
         });
     }
 

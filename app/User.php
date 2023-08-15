@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    public function getAllUsers(Int $user_id)
+    public function getAllUsers($user_id)
     {
         return $this->Where('id', '<>', $user_id)->paginate(5);
     }
@@ -28,7 +28,8 @@ class User extends Authenticatable
         'username',
         'mail',
         'password',
-        'id',
+        'following_id',
+        'follows_id',
     ];
 
     /**

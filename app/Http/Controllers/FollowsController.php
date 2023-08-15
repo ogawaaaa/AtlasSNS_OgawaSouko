@@ -9,33 +9,21 @@ use Illuminate\Http\Request;
 
 class FollowsController extends Controller
 {
-    public function follow($id)
+    public function follow(User $user)
    {
-    ddd($id);
-    //    $follower = auth()->user();
-    //     //フォローしているか
-    //    $is_following = $follower->isFollowing($user->id);
-    //    if($is_following) {
-    //     // フォローしていなければフォローする
-    //     $follower->follow($user->id);
-    //     return back();
-    //    }
+       $follower = Auth::user();
+        //フォローしているか
+       $is_following = $follower->isFollowed($user->id);
+       if($is_following) {
+        // フォローしていなければフォローする
+       $follower->follow($user->id);
+        return back();
+       }
    }
-   //public function follow(User $user) {
-    //$follow = Follow::create([
-      //  'following_id' => \Auth::user()->id,
-        //'followed_id' => $user->id,
-    //]);
-
-    //if($is_following){
-    //$follower->follow($user->id);
-    //return back();
-    //}
-   //}
 
    public function unFollow(User $user)
    {
-       $follower = auth()->user();
+       $follower = Auth::user();
        // フォローしているか
        $is_following = $follower->isFollowing($user->id);
        if($is_following) {
@@ -45,31 +33,19 @@ class FollowsController extends Controller
         }
     }
 
-    //public function unFollow(User $user) {
-      //  $follow = Follow::where('following_id', \Auth::user()->id)->where('followed_id', $user->id)->first();
-        //$follow->delete();
-        //$followCount = count(Follow::where('followed_id', $user->id)->get());
-
-        //if($is_following) {
-        //$follower->unFollow($user->id);
-      //  return back();
-    //}
-   //}
-
     public function followList(){
-        $user = Auth::user();
-        //$follows = auth()->user()->follows()->get();
-        //$follow_ids = $follow_ids->pluck('followed_id')->toArray();
+        $follows = AUth::User()->follows()->get();
         $following_id = Auth::user()->follows()->pluck('followed_id');
         $posts = Post::with('user')->whereIn('user_id', $following_id)->get();
-        return view('follows.followList', compact('posts'));
+        //dd($posts);
+        return view('follows.followList' , ['follows' => $follows,'posts' => $posts]);
     }
 
     public function followerList(){
-        $user = Auth::user();
+        $follows = AUth::User()->follows()->get();
         $followed_id = Auth::user()->follows()->pluck('following_id');
         $posts = Post::with('user')->whereIn('user_id', $followed_id)->get();
-        return view('follows.followerList' , compact('posts'));
+        return view('follows.followerList' , ['follows' => $follows,'posts' => $posts]);
     }
 
     public function show(Follow $follow)

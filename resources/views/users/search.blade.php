@@ -14,16 +14,16 @@
     @foreach($user as $user)
     @if ($user->id !== Auth::user()->id)
         <tr>
-            <td><img src="/storage/{{ $user->images }}">
+            <td><img src="{{ asset('images/icon2.png') }}" alt="">
                 {{ $user->username}}
                 @if (auth()->user()->isFollowing($user->id))
-                    <form action="{{ route('unFollow', ['id' => $user->id]) }}" method="POST">
+                    <form action="{{ route('unFollow', ['user' => $user->id]) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
                         <button type="submit" class="btn btn-danger">フォロー解除</button>
                     </form>
                 @else
-                    <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
+                    <form action="{{ route('follow', ['user' => $user->id]) }}" method="POST">
                         {{ csrf_field() }}
                         <button type="submit" class="btn btn-primary">フォローする</button>
                     </form>

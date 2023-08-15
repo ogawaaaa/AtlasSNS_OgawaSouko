@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
+use App\follow;
 use Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +21,47 @@ class UsersController extends Controller
     }
 
     public function profile(){
-        return view('users.profile');
+        $user = Auth::user();
+
+        return view('users.profile', ['user' => $user]);
+    }
+
+    public function profileUpdate()
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Auth::id())],
+        ]);
+
+        try {
+            $user = Auth::user();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->save();
+
+        } catch (\Exception $e) {
+            return back()->with('msg_error', 'プロフィールの更新に失敗しました')->withInput();
+        }
+
+        return redirect()->route('articles_index')->with('msg_success', 'プロフィールの更新が完了しました');
+    }
+
+    public function passwordUpdate(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        try {
+            $user = Auth::user();
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+
+        } catch (\Exception $e) {
+            return back()->with('msg_error', 'パスワードの更新に失敗しました')->withInput();
+        }
+
+        return redirect()->route('articles_index')->with('msg_success', 'パスワードの更新が完了しました');
     }
 
     public function search(Request $request){
@@ -39,22 +80,7 @@ class UsersController extends Controller
         return view('users.search', compact('user', 'keyword', 'search'));
     }
 
-    public function show(User $user, Follower $follower)
+    public function show()
     {
-        $login_user = auth()->user();
-        $is_following = $login_user->isFollowing($user->id);
-        $is_followed = $login_user->isFollowed($user->id);
-        $timelines = $tweet->getUserTimeLine($user->id);
-        $follow_count = $follower->getFollowCount($user->id);
-        $follower_count = $follower->getFollowerCount($user->id);
-
-        return view('users.show', [
-            'user'           => $user,
-            'is_following'   => $is_following,
-            'is_followed'    => $is_followed,
-            'timelines'      => $timelines,
-            'follow_count'   => $follow_count,
-            'follower_count' => $follower_count
-        ]);
     }
 }

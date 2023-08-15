@@ -43,16 +43,23 @@ Route::post('/update', 'PostsController@update');
 
 Route::get('post/{id}/delete', 'PostsController@delete');
 
-Route::get('/profile','UsersController@profile');
-
 Route::get('/search','UsersController@search');
-Route::post('/users/[id}/follow', 'FollowsController@follow')->name('follow');
+Route::get('/users/{user}/follow', 'FollowsController@follow')->name('follow');
+Route::post('/users/{user}/follow', 'FollowsController@follow')->name('follow');
+Route::get('/users/{user}/unFollow', 'FollowsController@unFollow')->name('unFollow');
 Route::delete('/users/{user}/unFollow', 'FollowsController@unFollow')->name('unFollow');
 
 Route::get('/follow-list','FollowsController@followList');
 Route::post('/follow-list','FollowsController@followList');
 Route::get('/follower-list','FollowsController@followerList');
 Route::post('/follower-list','FollowsController@followerList');
+
+//プロフィール編集画面表示
+Route::get('/profile', 'UsersController@profile')->name('profile');
+//プロフィール編集
+Route::put('/profile', 'UsersController@profileUpdate')->name('profile_edit');
+//パスワード編集
+Route::put('/password_change', 'UserController@passwordUpdate')->name('password_edit');
 
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::post('/logout', 'Auth\LoginController@logout');

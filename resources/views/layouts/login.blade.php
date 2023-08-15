@@ -25,14 +25,15 @@
         <h1><a><img src="images/atlas.png"></a></h1>
             <div id="">
                 <div id="">
-                    <p>{{Auth::user()->username}}さん<img src="images/arrow.png"></p>
+                    <p>{{Auth::user()->username}}さん</p>
+                    <p><img src="{{ asset('images/icon1.png') }}" alt=""></p>
                 <div>
                 <div>
                     <details>
                         <summary></summary>
                             <ul>
                                 <li><a href="/top">ホーム</a></li>
-                                <li><a href="/profile">プロフィール</a></li>
+                                <li><a class="dropdown-item" href="{{route('profile')}}"><span class="text-primary">プロフィール</span></a></li>
                                 <li><a href="/logout">ログアウト</a></li>
                             </ul>
                     </details>

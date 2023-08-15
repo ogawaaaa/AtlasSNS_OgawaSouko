@@ -18,13 +18,13 @@ class FollowsTableSeeder extends Seeder
                 'followed_id' => 1
             ]);
         }
-        //DB::table('follows')->insert([
-          //  [
-            //    'followed_id' => 'あいう',
-          //],
-            //[
-              //  'followed_id' => ' さしす',
-          //],
-        //]);
+
+        for ($i = 2; $i <= 10; $i++) {
+          DB::table('follows')->insert([
+              'followed_id' => $i,
+              'following_id' => 1
+          ]);
+        }
+
     }
 }
